@@ -20,9 +20,8 @@
                     {% else %}
                     <form action="{% url 'question_upload' %}" method="post">
                         {% csrf_token %}
-                        <div class="form-group">
-                            {{ question_form }}
-                        </div>
+                        {{ question_form.media }}
+                        {{ question_form.as_p }}
                         <button style="float:right" type="submit" class="btn btn-success">上传问题</button>
                     </form>
                     {% endif %}

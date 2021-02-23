@@ -2,9 +2,9 @@ from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from pytz import utc
-
 from .models import Question, Answer
 from .forms import AnswerForm, QuestionForm
+import markdown
 import datetime
 
 
@@ -38,6 +38,12 @@ def question_list(request):
 
 def question_detail(request, pk):
     question = get_object_or_404(Question, pk=pk)
+    question.question_text = markdown.markdown(question.question_text,
+                                               extensions=[
+                                                   'markdown.extensions.extra',
+                                                   'markdown.extensions.codehilite',
+                                                   'markdown.extensions.toc',
+                                               ])
     answers = Answer.objects.filter(question=question)
     data = {'question_pk': pk}
     answer_form = AnswerForm(initial=data)
@@ -70,6 +76,12 @@ def answer_list(request):
 
 def answer_detail(request, pk):
     answer = get_object_or_404(Answer, pk=pk)
+    answer.answer_text = markdown.markdown(answer.answer_text,
+                                           extensions=[
+                                               'markdown.extensions.extra',
+                                               'markdown.extensions.codehilite',
+                                               'markdown.extensions.toc',
+                                           ])
     content = {'answer': answer}
     return render(request, 'answer_detail.html', content)
 

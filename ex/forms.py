@@ -1,6 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from ckeditor_uploader.widgets import CKEditorUploadingWidget
+from mdeditor.fields import MDTextFormField
 from .models import Question
 
 
@@ -11,12 +11,18 @@ class QuestionForm(forms.Form):
     deadline = forms.DateTimeField(widget=forms.DateTimeInput(attrs={'type': 'datetime-local',
                                                                      'class': 'form-control'}),
                                    label='截至日期')
-    question_text = forms.CharField(widget=CKEditorUploadingWidget(), label='')
+    question_text = MDTextFormField()
 
+
+class MDEditorModleForm (forms.ModelForm):
+
+    class Meta:
+        model = Question
+        fields = '__all__'
 
 
 class AnswerForm(forms.Form):
-    answer_text = forms.CharField(widget=CKEditorUploadingWidget(), label='')
+    answer_text = MDTextFormField()
     question_pk = forms.IntegerField(widget=forms.HiddenInput)
 
     def clean(self):
@@ -28,3 +34,5 @@ class AnswerForm(forms.Form):
             raise ValidationError('问题不存在')
 
         return self.cleaned_data
+
+

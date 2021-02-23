@@ -14,7 +14,7 @@
     <div class="row">
         <div class="col-xs-10 col-xs-offset-1">
             <div class="page-header">
-                <h1>{{ question.title }} <small>老师：{{ question.teacher }}</small></h1>
+                <h1>{{ question.title }} <small>老师：{{ question.teacher.first_name }}</small></h1>
             </div>
             <div class="alert alert-info" role="alert">
                 <p>
@@ -47,12 +47,13 @@
                 </div>
                 <div class="panel-body">
                     {% if user.is_authenticated %}
-                    <span class="label label-success">Hello，{{ user }}，回答一下吧~</span>
+                    <span class="label label-success">Hello，{{ user.first_name }}，回答一下吧~</span>
 
                     <form action="{% url 'update_answer' %}" method="post">
                         {% csrf_token %}
                         <div class="form-group">
-                            {{ answer_form }}
+                            {{answer_form.media}}
+                            {{answer_form.as_p}}
                        </div>
                         <button style="float:right" type="submit" class="btn btn-success">提交回答</button>
                     </form>
